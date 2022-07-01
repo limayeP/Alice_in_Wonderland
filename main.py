@@ -1,3 +1,5 @@
+ #!/usr/bin/python
+
 from utils_project import *
 
 url = "https://www.gutenberg.org/files/11/11-0.txt"
@@ -42,9 +44,10 @@ print("The total number of words after cleaning are" , len(Words))
 print("The total number of unique words after cleaning are" , len(set(Words)))
 
 # 10 most commmon words
-fdist.most_common(10)
+fdist_Words = FreqDist(Words)
+fdist_Words.most_common(10)
 # Frequency Distribution Plot
-fdist.plot(20,cumulative=False)
+fdist_Words.plot(20,cumulative=False)
 plt.show()
 
 # Number of times Alice has been mentioned in each chapter
@@ -209,9 +212,9 @@ for k, v in d.items():
 dict1 = OrderedDict(sorted(dlen.items()))
 # How many many patterns are represented by one word.
 len(dict1[1])
-with open("/home/plimaye/Documents/CCSU/DATA_531/project_DATA531/alice_cv.txt", "w") as f:
-    for length in sorted(dlen.keys()):
-        f.write(f'{length}, {dlen[length]}\n\n')
+# with open("/home/plimaye/Documents/CCSU/DATA_531/project_DATA531/alice_cv.txt", "w") as f:
+#     for length in sorted(dlen.keys()):
+#         f.write(f'{length}, {dlen[length]}\n\n')
 
 #############################################################
 # Univocalic words containing a single type of vowel
@@ -242,6 +245,7 @@ h
 ########################################################
 # Hepax Legomena
 # Checking for words that occur only once in the entire text
+# fdist defined on line 47 as freqDist(words)
 ###########################################################
 fdist = FreqDist(words)
 hapax_legomenas = fdist.hapaxes()
@@ -489,10 +493,6 @@ plt.xlabel('Chapters')
 plt.ylabel('Hatter count')
 plt.show()
 
-
-
-
-
 # Plot tri-gram
 plt.figure(dpi=100, figsize=(7, 5))
 plt.title('Fig7 Three.ngrams')
@@ -512,513 +512,14 @@ plt.tick_params(axis='both', which='major', labelsize=10)
 rcParams.update({'figure.autolayout': True})
 plt.tight_layout()
 finder_four.ngram_fd.plot(10)
-##########################################################
-# POS tagging
-##########################################
-# Get nouns into a list from a dictionary
-# nltk.help.upenn_tagset()
-# Use Words which contains uppercase and lowecase words
-
-# POS tagging alice_words list
-# nltk.help.upenn_tagset()
-alice_pos = nltk.pos_tag(Words)
-alice_pos = list(map(list, alice_pos))
-
-# Get nouns
-n = get_nouns(alice_pos)
-len(n)
-
-# graph noun:
-freqn = FreqDist(n)
-freqn.plot(20, cumulative=False)
-
-# Ten most common nouns
-nq = freqn.most_common(10)
-# Get a list of main characters
-td = []
-for a in nq:
-    td.append((a[0]))
-td
-main_characters = ['Alice','Queen', 'King', 'Turtle', 'Gryphon', 'Hatter']
-
-
-# Get only adjectives
-adj = get_adj(alice_pos)
-len(adj)
-
-# Graph adjectives:
-freqadj = FreqDist(adj)
-freqadj.plot(20, cumulative=False)
-
-# Ten most common adjectives
-freqadj.most_common(10)
-
-# Get only verbs
-verb = get_verb(alice_pos)
-len(verb)
-
-# Graph verbs:
-freqverb = FreqDist(verb)
-freqverb.plot(20, cumulative=False)
-
-# Ten most common verbs
-freqverb.most_common(10)
-
-# Find words ending in "ed" with regex
-ed = [w for w in set(words) if re.search('ed$', w)]
-print("There are", len(ed), "words that are in the past tense containing 'ed'")
-########################################################
-main_characters = ['Alice','Queen', 'King', 'Turtle', 'Gryphon', 'Hatter']
-# Number of times Queen has been mentioned in each chapter
-queen_count = []
-for c in chapters[0:]:
-    queen_count.append(c.count("Queen"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), queen_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), queen_count, edgecolor='black')
-plt.title('Fig12 Distribution of "Queen" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Queen count')
-plt.show()
-
-# Number of times King has been mentioned in each chapter
-king_count = []
-for c in chapters[0:]:
-    king_count.append(c.count("King"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), king_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), king_count, edgecolor='black')
-plt.title('Fig13 Distribution of "King" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('King count')
-plt.show()
-
-# Number of times Turtle has been mentioned in each chapter
-turtle_count = []
-for c in chapters[0:]:
-    turtle_count.append(c.count("Turtle"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), turtle_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), turtle_count, edgecolor='black')
-plt.title('Fig14 Distribution of "Turlte" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Turtle count')
-plt.show()
-
-# Number of times Gryphon has been mentioned in each chapter
-gryphon_count = []
-for c in chapters[0:]:
-    gryphon_count.append(c.count("Gryphon"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), gryphon_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), gryphon_count, edgecolor='black')
-plt.title('Fig15 Distribution of "Gryphon" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Gryphon count')
-plt.show()
-
-# Number of times Hatter has been mentioned in each chapter
-hatter_count = []
-for c in chapters[0:]:
-    hatter_count.append(c.count("Hatter"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), hatter_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), hatter_count, edgecolor='black')
-plt.title('Fig16 Distribution of "Hatter" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Hatter count')
-plt.show()
-
-
-
-
-
-# Plot tri-gram
-plt.figure(dpi=100, figsize=(7, 5))
-plt.title('Fig7 Three.ngrams')
-# plt.xlabel('three.ngram')
-# plt.ylabel('frequency')
-plt.tick_params(axis='both', which='major', labelsize=10)
-rcParams.update({'figure.autolayout': True})
-plt.tight_layout()
-finder_three.ngram_fd.plot(10)
-
-# Plot quadri-gram
-plt.figure(dpi=100, figsize=(7, 5))
-plt.title('Fig8 Alice four.ngram')
-# plt.xlabel('three.ngram')
-# plt.ylabel('frequency')
-plt.tick_params(axis='both', which='major', labelsize=10)
-rcParams.update({'figure.autolayout': True})
-plt.tight_layout()
-finder_four.ngram_fd.plot(10)
-##########################################################
-# POS tagging
-##########################################
-# Get nouns into a list from a dictionary
-# nltk.help.upenn_tagset()
-# Use Words which contains uppercase and lowecase words
-
-# POS tagging alice_words list
-# nltk.help.upenn_tagset()
-alice_pos = nltk.pos_tag(Words)
-alice_pos = list(map(list, alice_pos))
-
-# Get nouns
-n = get_nouns(alice_pos)
-len(n)
-
-# graph noun:
-freqn = FreqDist(n)
-freqn.plot(20, cumulative=False)
-
-# Ten most common nouns
-nq = freqn.most_common(10)
-# Get a list of main characters
-td = []
-for a in nq:
-    td.append((a[0]))
-td
-main_characters = ['Alice','Queen', 'King', 'Turtle', 'Gryphon', 'Hatter']
-
-
-# Get only adjectives
-adj = get_adj(alice_pos)
-len(adj)
-
-# Graph adjectives:
-freqadj = FreqDist(adj)
-freqadj.plot(20, cumulative=False)
-
-# Ten most common adjectives
-freqadj.most_common(10)
-
-# Get only verbs
-verb = get_verb(alice_pos)
-len(verb)
-
-# Graph verbs:
-freqverb = FreqDist(verb)
-freqverb.plot(20, cumulative=False)
-
-# Ten most common verbs
-freqverb.most_common(10)
-
-# Find words ending in "ed" with regex
-ed = [w for w in set(words) if re.search('ed$', w)]
-print("There are", len(ed), "words that are in the past tense containing 'ed'")
-########################################################
-main_characters = ['Alice','Queen', 'King', 'Turtle', 'Gryphon', 'Hatter']
-# Number of times Queen has been mentioned in each chapter
-queen_count = []
-for c in chapters[0:]:
-    queen_count.append(c.count("Queen"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), queen_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), queen_count, edgecolor='black')
-plt.title('Fig12 Distribution of "Queen" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Queen count')
-plt.show()
-
-# Number of times King has been mentioned in each chapter
-king_count = []
-for c in chapters[0:]:
-    king_count.append(c.count("King"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), king_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), king_count, edgecolor='black')
-plt.title('Fig13 Distribution of "King" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('King count')
-plt.show()
-
-# Number of times Turtle has been mentioned in each chapter
-turtle_count = []
-for c in chapters[0:]:
-    turtle_count.append(c.count("Turtle"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), turtle_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), turtle_count, edgecolor='black')
-plt.title('Fig14 Distribution of "Turlte" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Turtle count')
-plt.show()
-
-# Number of times Gryphon has been mentioned in each chapter
-gryphon_count = []
-for c in chapters[0:]:
-    gryphon_count.append(c.count("Gryphon"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), gryphon_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), gryphon_count, edgecolor='black')
-plt.title('Fig15 Distribution of "Gryphon" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Gryphon count')
-plt.show()
-
-# Number of times Hatter has been mentioned in each chapter
-hatter_count = []
-for c in chapters[0:]:
-    hatter_count.append(c.count("Hatter"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), hatter_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), hatter_count, edgecolor='black')
-plt.title('Fig16 Distribution of "Hatter" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Hatter count')
-plt.show()
-
-
-
-
-
-# Plot tri-gram
-plt.figure(dpi=100, figsize=(7, 5))
-plt.title('Fig7 Three.ngrams')
-# plt.xlabel('three.ngram')
-# plt.ylabel('frequency')
-plt.tick_params(axis='both', which='major', labelsize=10)
-rcParams.update({'figure.autolayout': True})
-plt.tight_layout()
-finder_three.ngram_fd.plot(10)
-
-# Plot quadri-gram
-plt.figure(dpi=100, figsize=(7, 5))
-plt.title('Fig8 Alice four.ngram')
-# plt.xlabel('three.ngram')
-# plt.ylabel('frequency')
-plt.tick_params(axis='both', which='major', labelsize=10)
-rcParams.update({'figure.autolayout': True})
-plt.tight_layout()
-finder_four.ngram_fd.plot(10)
-##########################################################
-# POS tagging
-##########################################
-# Get nouns into a list from a dictionary
-# nltk.help.upenn_tagset()
-# Use Words which contains uppercase and lowecase words
-
-# POS tagging alice_words list
-# nltk.help.upenn_tagset()
-alice_pos = nltk.pos_tag(Words)
-alice_pos = list(map(list, alice_pos))
-
-# Get nouns
-n = get_nouns(alice_pos)
-len(n)
-
-# graph noun:
-freqn = FreqDist(n)
-freqn.plot(20, cumulative=False)
-
-# Ten most common nouns
-nq = freqn.most_common(10)
-# Get a list of main characters
-td = []
-for a in nq:
-    td.append((a[0]))
-td
-main_characters = ['Alice','Queen', 'King', 'Turtle', 'Gryphon', 'Hatter']
-
-
-# Get only adjectives
-adj = get_adj(alice_pos)
-len(adj)
-
-# Graph adjectives:
-freqadj = FreqDist(adj)
-freqadj.plot(20, cumulative=False)
-
-# Ten most common adjectives
-freqadj.most_common(10)
-
-# Get only verbs
-verb = get_verb(alice_pos)
-len(verb)
-
-# Graph verbs:
-freqverb = FreqDist(verb)
-freqverb.plot(20, cumulative=False)
-
-# Ten most common verbs
-freqverb.most_common(10)
-
-# Find words ending in "ed" with regex
-ed = [w for w in set(words) if re.search('ed$', w)]
-print("There are", len(ed), "words that are in the past tense containing 'ed'")
-########################################################
-main_characters = ['Alice','Queen', 'King', 'Turtle', 'Gryphon', 'Hatter']
-# Number of times Queen has been mentioned in each chapter
-queen_count = []
-for c in chapters[0:]:
-    queen_count.append(c.count("Queen"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), queen_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), queen_count, edgecolor='black')
-plt.title('Fig12 Distribution of "Queen" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Queen count')
-plt.show()
-
-# Number of times King has been mentioned in each chapter
-king_count = []
-for c in chapters[0:]:
-    king_count.append(c.count("King"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), king_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), king_count, edgecolor='black')
-plt.title('Fig13 Distribution of "King" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('King count')
-plt.show()
-
-# Number of times Turtle has been mentioned in each chapter
-turtle_count = []
-for c in chapters[0:]:
-    turtle_count.append(c.count("Turtle"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), turtle_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), turtle_count, edgecolor='black')
-plt.title('Fig14 Distribution of "Turlte" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Turtle count')
-plt.show()
-
-# Number of times Gryphon has been mentioned in each chapter
-gryphon_count = []
-for c in chapters[0:]:
-    gryphon_count.append(c.count("Gryphon"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), gryphon_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), gryphon_count, edgecolor='black')
-plt.title('Fig15 Distribution of "Gryphon" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Gryphon count')
-plt.show()
-
-# Number of times Hatter has been mentioned in each chapter
-hatter_count = []
-for c in chapters[0:]:
-    hatter_count.append(c.count("Hatter"))
-# combine the chapter titles (keys) and “Alice” counts
-# (values) and convert them to a dictionary.
-mydict = dict(zip(range(1, len(chapters)+1), hatter_count))
-print(mydict)
-
-plt.bar(range(1, len(chapters)+1), hatter_count, edgecolor='black')
-plt.title('Fig16 Distribution of "Hatter" across chapters')
-plt.xlabel('Chapters')
-plt.ylabel('Hatter count')
-plt.show()
-
-
-
-https://realpython.com/python-nltk-sentiment-analysis/
-# OPen the character file
-characters_txt = open("Characters.txt").read()
-# How many times is each character mentioned in the text
-num_per_character = []
-
-for character in characters_txt.splitlines():
-    num_per_character.append(alice_txt.count(character))
-
-print(num_per_character)
-# Put the character counts computed above in a dictionary with# character names as the keys and counts as the values.
-characters = characters_txt.splitlines()
-dict(zip(characters, num_per_character))
-
-
-
-
-
-
-
-# Count the number of times Mouse and Duck appear
-# appear in a given chapter
-mouse_count_ch2 = alice_chapters[2].count("Mouse")
-print(mouse_count_ch2)
-
-duck_count_ch2 = alice_chapters[2].count("Duck")
-print(duck_count_ch2)
-
-# which of these two characters appears
-# more often in Chapter 2:
-if mouse_count_ch2 < duck_count_ch2:
-    print("Mouse count is less than Duck count in Chapter II.")
-elif mouse_count_ch2 > duck_count_ch2:
-    print("Mouse count is larger than Duck count in Chapter II.")
-else:
-    print("Mouse count is equal to Duck count in Chapter II.")
-
-# To find out if “Alice” or “Eaglet” appear in paragraph 11:
-alice_eaglet_exist = "Alice" in alice_paragraphs[10] or "Eaglet" in alice_paragraphs[10]
-alice_eaglet_exist
-
-
-# count number sorted occurances of words
-
-word_count(words)
-
-
-
-############################################################
-# Using the text converted to nltk
-# characters in adventures of Alice in Wonderland
-characters = ['Alice', 'hatter', 'hare' ,'queen','king', 'knave' ,'duchess', 'cook', 'catterpillar' , 'rabbit', 'cat', 'soldiers', 'puppy', 'turtle', 'gryphon', 'dormouse', 'mouse', 'baby']
-
 
 ###############################################################
+# frequency distribution of a given word
+tex = nltk.Text(words)
+fd = tex.vocab()
+fd.tabulate(5)
 # Obtain list with information about location
 # of each occurrence, with text.concordance_list():
 concordance_list = tex.concordance_list("alice", lines=5) 
 for entry in concordance_list:
     print(entry.line)
-# frequency distribution of a given word
-
-tex = nltk.Text(words)
-fd = tex.vocab()
-fd.tabulate(5)
-
