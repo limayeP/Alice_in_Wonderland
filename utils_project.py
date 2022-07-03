@@ -16,6 +16,8 @@ import pronouncing
 from nltk.corpus import wordnet
 
 
+# Make this into classes (TODO)
+
 def read_gutenberg(url):
     """
     Input: text to be analyzed
